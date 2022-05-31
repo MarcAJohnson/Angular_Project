@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shoppinglist/shoppinglist.service';
 import { Recipe } from "./recipe.model";
@@ -7,9 +8,7 @@ import { Recipe } from "./recipe.model";
 
 export class RecipeService {
 
-    recipeSelected = new EventEmitter<Recipe>();
-
-    constructor(private shoppingListService: ShoppingListService) {}
+    constructor(private shoppingListService: ShoppingListService, private route: ActivatedRoute) {}
 
     private recipes: Recipe[] = [
         new Recipe(
@@ -22,7 +21,7 @@ export class RecipeService {
                 new Ingredient('Gnocchi noddles', 1)
             ]),
         new Recipe(
-            "Cavateli", 
+            "Cavateli",
             "Ricotta Cavateli with Asparagus!", 
             "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2014/3/7/0/FNM_040114-Ricotta-Cavateli-With-Asparagus-Recipe-h_s4x3.jpg.rend.hgtvcom.476.357.suffix/1394210818675.jpeg",
             [
@@ -36,6 +35,10 @@ export class RecipeService {
         return this.recipes.slice(); // along with setting recipes array as private, 
         //using slice gives a copy of the array so we cannot edit anything from outside
         
+    }
+
+    getRecipe(index: number) {
+        return this.recipes.slice()[index];
     }
 
     addIngredientsToShoppingList(ingredients: Ingredient[]) {
