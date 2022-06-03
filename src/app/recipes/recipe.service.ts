@@ -1,5 +1,6 @@
-import { EventEmitter, Injectable} from '@angular/core';
+import { Injectable} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shoppinglist/shoppinglist.service';
 import { Recipe } from "./recipe.model";
