@@ -106,5 +106,8 @@
       }
     }
   },
-  "defaultProject": "Angular_Project"
+  "defaultProject": "Angular_Project",
+  "cli": {
+    "analytics": false
+  }
 }
