@@ -33,6 +33,8 @@ export class ShoppingListService {
         //... operator(spread) used to change an array into a list so each ingredient can
         //be added to an array as individual elements instead of a complete array
 
+        //this is a test
+
         this.ingredientsChanged.next(this.ingredients.slice());
                                             
     }
