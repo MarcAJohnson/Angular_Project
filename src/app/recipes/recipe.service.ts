@@ -12,26 +12,33 @@ export class RecipeService {
 
     constructor(private shoppingListService: ShoppingListService, private route: ActivatedRoute) {}
 
-    private recipes: Recipe[] = [
-        new Recipe(
-            "Gnocchi", 
-            "Chorizo gnocchi with mozarella!", 
-            "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272",
-            [
-                new Ingredient('Chorizo', 1),
-                new Ingredient('Mozarella', 3),
-                new Ingredient('Gnocchi noddles', 1)
-            ]),
-        new Recipe(
-            "Cavateli",
-            "Ricotta Cavateli with Asparagus!", 
-            "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2014/3/7/0/FNM_040114-Ricotta-Cavateli-With-Asparagus-Recipe-h_s4x3.jpg.rend.hgtvcom.476.357.suffix/1394210818675.jpeg",
-            [
-                new Ingredient('Asparagus', 1),
-                new Ingredient('Ricotta Cheese', 1),
-                new Ingredient('Cavateli noodles', 1)
-            ])
-      ];
+    // private recipes: Recipe[] = [
+    //     new Recipe(
+    //         "Gnocchi", 
+    //         "Chorizo gnocchi with mozarella!", 
+    //         "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272",
+    //         [
+    //             new Ingredient('Chorizo', 1),
+    //             new Ingredient('Mozarella', 3),
+    //             new Ingredient('Gnocchi noddles', 1)
+    //         ]),
+    //     new Recipe(
+    //         "Cavateli",
+    //         "Ricotta Cavateli with Asparagus!", 
+    //         "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2014/3/7/0/FNM_040114-Ricotta-Cavateli-With-Asparagus-Recipe-h_s4x3.jpg.rend.hgtvcom.476.357.suffix/1394210818675.jpeg",
+    //         [
+    //             new Ingredient('Asparagus', 1),
+    //             new Ingredient('Ricotta Cheese', 1),
+    //             new Ingredient('Cavateli noodles', 1)
+    //         ])
+    // ];
+
+    private recipes: Recipe[] = [];
+
+    setRecipes(recipes: Recipe[]) {
+        this.recipes = recipes;
+        this.recipesChanged.next(this.recipes.slice());
+    }
 
     getRecipes() {
         return this.recipes.slice(); // along with setting recipes array as private, 
