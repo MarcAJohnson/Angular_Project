@@ -1,20 +1,25 @@
-import { Component } from "@angular/core";
+import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { AuthResponseData, AuthService } from "./auth.service";
+import { AlertComponent } from "../shared/alert/alert.component";
+import { PlaceholderDirective } from "../shared/placeholder/placeholder.directive";
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html'
 })
 
-export class AuthComponent {
+export class AuthComponent  implements OnDestroy{
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private componentFactoryResolver: ComponentFactoryResolver) {}
   isLoginMode = true;
   isLoading = false;
   error: string = null;
+  @ViewChild(PlaceholderDirective, { static: false }) alertHost: PlaceholderDirective;
+
+  private closeSub: Subscription;
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -46,10 +51,46 @@ export class AuthComponent {
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
+        this.showErrorElert(this.error);
         this.isLoading = false;
       }
-    )
+    );
 
     form.reset();
   }
+
+  onHandleError() {
+    this.error = null;
+  }
+
+  ngOnDestroy(): void {
+    if (this.closeSub) {
+      this.closeSub.unsubscribe();
+    }
+  }
+
+  //dynamically creating a component to display error message
+  private showErrorElert(message: string) {
+    //const alertCmp = new AlertComponent();  //good typescript code but BAD angular code
+    //cannot just instanstiate an alert component
+    //angular needs to create the component: Angular Factory
+
+    const alertCmpFactory =
+      this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+    //^creates an object that knows how to create angular components
+
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
+
+    const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);
+
+    //references the creation of the component in alert component so...
+    //both @input message and @Output close
+    componentRef.instance.message = message;
+    this.closeSub = componentRef.instance.close.subscribe(() => {
+      this.closeSub.unsubscribe();
+      hostViewContainerRef.clear();
+    });
+  }
+
 }
